@@ -80,8 +80,8 @@ namespace DZNEmptyDataSet
         UIView CustomViewForEmptyDataSet(UIScrollView scrollView);
 
         // @optional -(CGPoint)offsetForEmptyDataSet:(UIScrollView *)scrollView __attribute__((deprecated(" Use -verticalOffsetForEmptyDataSet: instead")));
-        [Export("offsetForEmptyDataSet:")]
-        CGPoint OffsetForEmptyDataSet(UIScrollView scrollView);
+        //[Export("offsetForEmptyDataSet:")]
+        //CGPoint OffsetForEmptyDataSet(UIScrollView scrollView);
 
         // @optional -(CGFloat)verticalOffsetForEmptyDataSet:(UIScrollView *)scrollView;
         [Export("verticalOffsetForEmptyDataSet:")]
