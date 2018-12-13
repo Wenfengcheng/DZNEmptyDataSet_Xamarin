@@ -3,12 +3,29 @@ using CoreAnimation;
 using DZNEmptyDataSet;
 using Foundation;
 using UIKit;
+using CoreFoundation;
 
 namespace DZNEmpty.Sample
 {
     public partial class ViewController : UIViewController
     {
         private UITableView tableview;
+        
+        private bool _isLoading =false;
+        public bool IsLoading
+        {
+            get => _isLoading;
+            set
+            {
+                if(_isLoading == value)
+                {
+                    return;
+                }
+                _isLoading = value;
+                tableview..ReloadEmptyDataSet();
+            }
+        }
+        
         protected ViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
@@ -23,8 +40,8 @@ namespace DZNEmpty.Sample
                 BackgroundColor = UIColor.White
             };
             tableview.UserInteractionEnabled = true;
-            tableview.SetEmptyDataSetDelegate(new TableViewDataSetDelegate());
-            tableview.SetEmptyDataSetSource(new TableViewDataSetSource());
+            tableview.SetEmptyDataSetDelegate(new TableViewDataSetDelegate(new WeakReference<ViewController>(this)));
+            tableview.SetEmptyDataSetSource(new TableViewDataSetSource(new WeakReference<ViewController>(this)));
             tableview.TableFooterView = new UIView();
             this.View.AddSubview(tableview);
             // Perform any additional setup after loading the view, typically from a nib.
@@ -39,8 +56,22 @@ namespace DZNEmpty.Sample
 
     public class TableViewDataSetSource : DZNEmptyDataSetSource
     {
+        private ViewController weakSelf;
+        
+        public TableViewDataSetSource(WeakReference<ViewController> self)
+        {
+            if (self.TryGetTarget(out ViewController controller))
+            {
+                weakSelf = controller;
+            }
+        }
+        
         public override UIImage ImageForEmptyDataSet(UIScrollView scrollView)
         {
+            if(weakSelf.IsLoading)
+            {
+                return UIImage.FromBundle("loading_imgBlue_78x78");
+            }
             return UIImage.FromBundle("placeholder_dropbox");
         }
 
@@ -89,6 +120,16 @@ namespace DZNEmpty.Sample
 
     public class TableViewDataSetDelegate : DZNEmptyDataSetDelegate
     {
+        private ViewController weakSelf;
+        
+        public TableViewDataSetDelegate(WeakReference<ViewController> self)
+        {
+            if (self.TryGetTarget(out ViewController controller))
+            {
+                weakSelf = controller;
+            }
+        }
+        
         public override bool EmptyDataSetShouldDisplay(UIScrollView scrollView)
         {
             return true;
@@ -106,17 +147,27 @@ namespace DZNEmpty.Sample
 
         public override bool EmptyDataSetShouldAnimateImageView(UIScrollView scrollView)
         {
-            return false;
+            return weakSelf.IsLoading;
         }
 
         public override void EmptyDataSetDidTapButton(UIScrollView scrollView, UIButton button)
         {
-            scrollView.ReloadEmptyDataSet();
+            weakSelf.IsLoading = true;
+            
+            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            {
+                weakSelf.IsLoading = false;
+            });
         }
 
         public override void EmptyDataSetDidTapView(UIScrollView scrollView, UIView view)
         {
-            scrollView.ReloadEmptyDataSet();
+            weakSelf.IsLoading = true;
+            
+            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            {
+                weakSelf.IsLoading = false;
+            });
         }
     }
 }
