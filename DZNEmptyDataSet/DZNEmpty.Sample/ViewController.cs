@@ -22,9 +22,15 @@ namespace DZNEmpty.Sample
                     return;
                 }
                 _isLoading = value;
-                tableview..ReloadEmptyDataSet();
+                tableview.ReloadEmptyDataSet();
             }
         }
+
+        public ViewController()
+        {
+
+        }
+
         
         protected ViewController(IntPtr handle) : base(handle)
         {
@@ -35,16 +41,23 @@ namespace DZNEmpty.Sample
         {
             base.ViewDidLoad();
 
+            this.EdgesForExtendedLayout = UIRectEdge.None;
+
             tableview = new UITableView(this.View.Bounds)
             {
                 BackgroundColor = UIColor.White
             };
             tableview.UserInteractionEnabled = true;
-            tableview.SetEmptyDataSetDelegate(new TableViewDataSetDelegate(new WeakReference<ViewController>(this)));
-            tableview.SetEmptyDataSetSource(new TableViewDataSetSource(new WeakReference<ViewController>(this)));
+            tableview.SetEmptyDataSetDelegate(new TableViewDataSetDelegate(this));
+            tableview.SetEmptyDataSetSource(new TableViewDataSetSource(this));
             tableview.TableFooterView = new UIView();
             this.View.AddSubview(tableview);
             // Perform any additional setup after loading the view, typically from a nib.
+        }
+
+        public override void TouchesBegan(NSSet touches, UIEvent evt)
+        {
+            this.IsLoading = true;
         }
 
         public override void DidReceiveMemoryWarning()
@@ -56,23 +69,16 @@ namespace DZNEmpty.Sample
 
     public class TableViewDataSetSource : DZNEmptyDataSetSource
     {
-        private ViewController weakSelf;
+        [Weak]ViewController weakSelf;
         
-        public TableViewDataSetSource(WeakReference<ViewController> self)
+        public TableViewDataSetSource(ViewController controller)
         {
-            if (self.TryGetTarget(out ViewController controller))
-            {
-                weakSelf = controller;
-            }
+            weakSelf = controller;
         }
         
         public override UIImage ImageForEmptyDataSet(UIScrollView scrollView)
         {
-            if(weakSelf.IsLoading)
-            {
-                return UIImage.FromBundle("loading_imgBlue_78x78");
-            }
-            return UIImage.FromBundle("placeholder_dropbox");
+            return weakSelf.IsLoading ? UIImage.FromFile("loading_imgBlue_78x78") : UIImage.FromFile("placeholder_dropbox");
         }
 
         public override NSAttributedString TitleForEmptyDataSet(UIScrollView scrollView)
@@ -120,14 +126,11 @@ namespace DZNEmpty.Sample
 
     public class TableViewDataSetDelegate : DZNEmptyDataSetDelegate
     {
-        private ViewController weakSelf;
+        [Weak]ViewController weakSelf;
         
-        public TableViewDataSetDelegate(WeakReference<ViewController> self)
+        public TableViewDataSetDelegate(ViewController controller)
         {
-            if (self.TryGetTarget(out ViewController controller))
-            {
-                weakSelf = controller;
-            }
+            weakSelf = controller;
         }
         
         public override bool EmptyDataSetShouldDisplay(UIScrollView scrollView)
@@ -152,6 +155,7 @@ namespace DZNEmpty.Sample
 
         public override void EmptyDataSetDidTapButton(UIScrollView scrollView, UIButton button)
         {
+            // todo not invoked
             weakSelf.IsLoading = true;
             
             DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
@@ -162,6 +166,7 @@ namespace DZNEmpty.Sample
 
         public override void EmptyDataSetDidTapView(UIScrollView scrollView, UIView view)
         {
+            // todo not invoked
             weakSelf.IsLoading = true;
             
             DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>

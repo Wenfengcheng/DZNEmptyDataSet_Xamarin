@@ -120,6 +120,8 @@
     <BundleResource Include="Resources\ic_bike%403x.png" />
     <BundleResource Include="Resources\placeholder_dropbox.png" />
     <BundleResource Include="Resources\placeholder_dropbox%402x.png" />
+    <BundleResource Include="Resources\loading_imgBlue_78x78%402x.png" />
+    <BundleResource Include="Resources\loading_imgBlue_78x78%403x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
