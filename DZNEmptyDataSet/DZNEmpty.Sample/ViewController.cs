@@ -55,11 +55,6 @@ namespace DZNEmpty.Sample
             // Perform any additional setup after loading the view, typically from a nib.
         }
 
-        public override void TouchesBegan(NSSet touches, UIEvent evt)
-        {
-            this.IsLoading = true;
-        }
-
         public override void DidReceiveMemoryWarning()
         {
             base.DidReceiveMemoryWarning();
@@ -67,26 +62,26 @@ namespace DZNEmpty.Sample
         }
     }
 
-    public class TableViewDataSetSource : DZNEmptyDataSetSource
+    public class TableViewDataSetSource : EmptyDataSetSource
     {
-        [Weak]ViewController weakSelf;
+        ViewController weakSelf;
         
         public TableViewDataSetSource(ViewController controller)
         {
             weakSelf = controller;
         }
-        
-        public override UIImage ImageForEmptyDataSet(UIScrollView scrollView)
+
+        public override UIImage GetImage(UIScrollView scrollView)
         {
             return weakSelf.IsLoading ? UIImage.FromFile("loading_imgBlue_78x78") : UIImage.FromFile("placeholder_dropbox");
         }
 
-        public override NSAttributedString TitleForEmptyDataSet(UIScrollView scrollView)
+        public override NSAttributedString GetTitle (UIScrollView scrollView)
         {
             return new NSAttributedString("Star Your Favorite Files", UIFont.SystemFontOfSize(17f), UIColor.FromRGB(172, 175, 189));
         }
 
-        public override NSAttributedString DescriptionForEmptyDataSet(UIScrollView scrollView)
+        public override NSAttributedString GetDescription(UIScrollView scrollView)
         {
             NSMutableParagraphStyle style = new NSMutableParagraphStyle()
             {
@@ -100,7 +95,7 @@ namespace DZNEmpty.Sample
                                           paragraphStyle: style);
         }
 
-        public override CAAnimation ImageAnimationForEmptyDataSet(UIScrollView scrollView)
+        public override CAAnimation GetImageAnimation(UIScrollView scrollView)
         {
             CABasicAnimation animation = CABasicAnimation.FromKeyPath("transform");
             animation.From = NSValue.FromCATransform3D(CATransform3D.Identity);
@@ -110,23 +105,22 @@ namespace DZNEmpty.Sample
             return animation;
         }
 
-        public override NSAttributedString ButtonTitleForEmptyDataSet(UIScrollView scrollView, UIControlState state)
+        public override NSAttributedString GetButtonTitle(UIScrollView scrollView, UIControlState state)
         {
             return new NSAttributedString("Learn more",
                                                       UIFont.SystemFontOfSize(15f),
                                                       UIColor.FromRGB(0, 126, 229));
         }
 
-
-        public override UIColor BackgroundColorForEmptyDataSet(UIScrollView scrollView)
+        public override UIColor GetBackgroundColor(UIScrollView scrollView)
         {
             return UIColor.FromRGB(240, 243, 245);
         }
     }
 
-    public class TableViewDataSetDelegate : DZNEmptyDataSetDelegate
+    public class TableViewDataSetDelegate : EmptyDataSetDelegate
     {
-        [Weak]ViewController weakSelf;
+        ViewController weakSelf;
         
         public TableViewDataSetDelegate(ViewController controller)
         {
@@ -156,23 +150,25 @@ namespace DZNEmpty.Sample
         public override void EmptyDataSetDidTapButton(UIScrollView scrollView, UIButton button)
         {
             // todo not invoked
-            weakSelf.IsLoading = true;
-            
-            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
-            {
-                weakSelf.IsLoading = false;
-            });
+            //weakSelf.IsLoading = true;
+
+            //DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            //{
+            //    weakSelf.IsLoading = false;
+            //});
+            System.Diagnostics.Debug.WriteLine("EmptyDataSetDidTapButton");
         }
 
         public override void EmptyDataSetDidTapView(UIScrollView scrollView, UIView view)
         {
             // todo not invoked
-            weakSelf.IsLoading = true;
-            
-            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
-            {
-                weakSelf.IsLoading = false;
-            });
+            //weakSelf.IsLoading = true;
+
+            //DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            //{
+            //    weakSelf.IsLoading = false;
+            //});
+            System.Diagnostics.Debug.WriteLine("EmptyDataSetDidTapView");
         }
     }
 }

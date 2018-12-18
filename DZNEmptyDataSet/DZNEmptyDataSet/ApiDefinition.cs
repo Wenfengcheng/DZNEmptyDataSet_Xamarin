@@ -13,31 +13,35 @@ namespace DZNEmptyDataSet
     interface UIScrollView_EmptyDataSet
     {
         // @property (nonatomic, weak) id<DZNEmptyDataSetSource> emptyDataSetSource __attribute__((iboutlet));
-        [Export("emptyDataSetSource")]
-        DZNEmptyDataSetSource EmptyDataSetSource();
+        [NullAllowed, Export("emptyDataSetSource", ArgumentSemantic.Weak)]
+        IEmptyDataSetSource EmptyDataSetSource();
 
-        [Export("setEmptyDataSetSource:")]
-        void SetEmptyDataSetSource(DZNEmptyDataSetSource source);
+        [Export("setEmptyDataSetSource:", ArgumentSemantic.Weak)]
+        void SetEmptyDataSetSource([NullAllowed]IEmptyDataSetSource source);
 
-        [Export("emptyDataSetDelegate")]
-        DZNEmptyDataSetDelegate EmptyDataSetDelegate();
+        [NullAllowed, Export("emptyDataSetDelegate", ArgumentSemantic.Weak)]
+        IEmptyDataSetDelegate EmptyDataSetDelegate();
 
-        [Export("setEmptyDataSetDelegate:")]
-        void SetEmptyDataSetDelegate(DZNEmptyDataSetDelegate @delegate);
+        [Export("setEmptyDataSetDelegate:", ArgumentSemantic.Weak)]
+        void SetEmptyDataSetDelegate([NullAllowed]IEmptyDataSetDelegate @delegate);
 
         // @property (readonly, getter = isEmptyDataSetVisible, nonatomic) BOOL emptyDataSetVisible;
         [Export("isEmptyDataSetVisible")]
-        bool EmptyDataSetVisible();
+        bool IsEmptyDataSetVisible();
 
         // -(void)reloadEmptyDataSet;
         [Export("reloadEmptyDataSet")]
         void ReloadEmptyDataSet();
     }
 
+    interface IEmptyDataSetSource
+    {
+    }
+
     // @protocol DZNEmptyDataSetSource <NSObject>
     [Protocol, Model]
-    [BaseType(typeof(NSObject))]
-    interface DZNEmptyDataSetSource
+    [BaseType(typeof(NSObject), Name = "DZNEmptyDataSetSource")]
+    interface EmptyDataSetSource
     {
         // @optional -(NSAttributedString *)titleForEmptyDataSet:(UIScrollView *)scrollView;
         [Export("titleForEmptyDataSet:")]
@@ -92,10 +96,15 @@ namespace DZNEmptyDataSet
         nfloat SpaceHeightForEmptyDataSet(UIScrollView scrollView);
     }
 
+    interface IEmptyDataSetDelegate
+    {
+
+    }
+
     // @protocol DZNEmptyDataSetDelegate <NSObject>
     [Protocol, Model]
-    [BaseType(typeof(NSObject))]
-    interface DZNEmptyDataSetDelegate
+    [BaseType(typeof(NSObject), Name = "DZNEmptyDataSetDelegate")]
+    interface EmptyDataSetDelegate
     {
         // @optional -(BOOL)emptyDataSetShouldFadeIn:(UIScrollView *)scrollView;
         [Export("emptyDataSetShouldFadeIn:")]
@@ -154,15 +163,4 @@ namespace DZNEmptyDataSet
         void EmptyDataSetDidDisappear(UIScrollView scrollView);
     }
 
-    [Static]
-    partial interface Constants
-    {
-        // extern double DZNEmptyDataSetVersionNumber;
-        [Field("DZNEmptyDataSetVersionNumber", "__Internal")]
-        double DZNEmptyDataSetVersionNumber { get; }
-
-        // extern const unsigned char [] DZNEmptyDataSetVersionString;
-        [Field("DZNEmptyDataSetVersionString", "__Internal")]
-        NSString DZNEmptyDataSetVersionString { get; }
-    }
 }

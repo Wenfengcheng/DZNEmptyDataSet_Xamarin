@@ -85,6 +85,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
+    <Reference Include="DZNEmptyDataSet">
+      <HintPath>..\packages\com.microsoft.DZNEmptyDataSet.1.7.3\lib\Xamarin.iOS10\DZNEmptyDataSet.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -100,6 +103,7 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -108,12 +112,6 @@
     <Compile Include="ViewController.designer.cs">
       <DependentUpon>ViewController.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DZNEmptyDataSet\DZNEmptyDataSet.csproj">
-      <Project>{DACDA0BB-E076-4D80-BE16-9C3BE953192C}</Project>
-      <Name>DZNEmptyDataSet</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\ic_bike%402x.png" />
