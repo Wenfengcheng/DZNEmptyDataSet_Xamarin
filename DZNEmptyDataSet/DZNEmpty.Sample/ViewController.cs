@@ -26,15 +26,21 @@ namespace DZNEmpty.Sample
             }
         }
 
+        private TableViewDataSetDelegate TableViewDataSetDelegate;
+        private TableViewDataSetSource TableViewDataSetSource;
+
         public ViewController()
         {
-
+            TableViewDataSetSource = new TableViewDataSetSource(this);
+            TableViewDataSetDelegate = new TableViewDataSetDelegate(this);
         }
 
         
         protected ViewController(IntPtr handle) : base(handle)
         {
             // Note: this .ctor should not contain any initialization logic.
+            TableViewDataSetSource = new TableViewDataSetSource(this);
+            TableViewDataSetDelegate = new TableViewDataSetDelegate(this);
         }
 
         public override void ViewDidLoad()
@@ -48,8 +54,8 @@ namespace DZNEmpty.Sample
                 BackgroundColor = UIColor.White
             };
             tableview.UserInteractionEnabled = true;
-            tableview.SetEmptyDataSetDelegate(new TableViewDataSetDelegate(this));
-            tableview.SetEmptyDataSetSource(new TableViewDataSetSource(this));
+            tableview.SetEmptyDataSetDelegate(TableViewDataSetDelegate);
+            tableview.SetEmptyDataSetSource(TableViewDataSetSource);
             tableview.TableFooterView = new UIView();
             this.View.AddSubview(tableview);
             // Perform any additional setup after loading the view, typically from a nib.
@@ -65,23 +71,22 @@ namespace DZNEmpty.Sample
     public class TableViewDataSetSource : EmptyDataSetSource
     {
         ViewController weakSelf;
-        
-        public TableViewDataSetSource(ViewController controller)
+        public TableViewDataSetSource(ViewController viewController)
         {
-            weakSelf = controller;
+            weakSelf = viewController;
         }
 
-        public override UIImage GetImage(UIScrollView scrollView)
+        public override UIImage ImageForEmptyDataSet(UIScrollView scrollView)
         {
             return weakSelf.IsLoading ? UIImage.FromFile("loading_imgBlue_78x78") : UIImage.FromFile("placeholder_dropbox");
         }
 
-        public override NSAttributedString GetTitle (UIScrollView scrollView)
+        public override NSAttributedString TitleForEmptyDataSet(UIScrollView scrollView)
         {
             return new NSAttributedString("Star Your Favorite Files", UIFont.SystemFontOfSize(17f), UIColor.FromRGB(172, 175, 189));
         }
 
-        public override NSAttributedString GetDescription(UIScrollView scrollView)
+        public override NSAttributedString DescriptionForEmptyDataSet(UIScrollView scrollView)
         {
             NSMutableParagraphStyle style = new NSMutableParagraphStyle()
             {
@@ -95,7 +100,7 @@ namespace DZNEmpty.Sample
                                           paragraphStyle: style);
         }
 
-        public override CAAnimation GetImageAnimation(UIScrollView scrollView)
+        public override CAAnimation ImageAnimationForEmptyDataSet(UIScrollView scrollView)
         {
             CABasicAnimation animation = CABasicAnimation.FromKeyPath("transform");
             animation.From = NSValue.FromCATransform3D(CATransform3D.Identity);
@@ -105,14 +110,14 @@ namespace DZNEmpty.Sample
             return animation;
         }
 
-        public override NSAttributedString GetButtonTitle(UIScrollView scrollView, UIControlState state)
+        public override NSAttributedString ButtonTitleForEmptyDataSet(UIScrollView scrollView, UIControlState state)
         {
             return new NSAttributedString("Learn more",
                                                       UIFont.SystemFontOfSize(15f),
                                                       UIColor.FromRGB(0, 126, 229));
         }
 
-        public override UIColor GetBackgroundColor(UIScrollView scrollView)
+        public override UIColor BackgroundColorForEmptyDataSet(UIScrollView scrollView)
         {
             return UIColor.FromRGB(240, 243, 245);
         }
@@ -121,12 +126,12 @@ namespace DZNEmpty.Sample
     public class TableViewDataSetDelegate : EmptyDataSetDelegate
     {
         ViewController weakSelf;
-        
+
         public TableViewDataSetDelegate(ViewController controller)
         {
             weakSelf = controller;
         }
-        
+
         public override bool EmptyDataSetShouldDisplay(UIScrollView scrollView)
         {
             return true;
@@ -139,7 +144,7 @@ namespace DZNEmpty.Sample
 
         public override bool EmptyDataSetShouldAllowScroll(UIScrollView scrollView)
         {
-            return true;
+            return false;
         }
 
         public override bool EmptyDataSetShouldAnimateImageView(UIScrollView scrollView)
@@ -150,25 +155,23 @@ namespace DZNEmpty.Sample
         public override void EmptyDataSetDidTapButton(UIScrollView scrollView, UIButton button)
         {
             // todo not invoked
-            //weakSelf.IsLoading = true;
+            weakSelf.IsLoading = true;
 
-            //DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
-            //{
-            //    weakSelf.IsLoading = false;
-            //});
-            System.Diagnostics.Debug.WriteLine("EmptyDataSetDidTapButton");
+            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            {
+                weakSelf.IsLoading = false;
+            });
         }
 
         public override void EmptyDataSetDidTapView(UIScrollView scrollView, UIView view)
         {
             // todo not invoked
-            //weakSelf.IsLoading = true;
+            weakSelf.IsLoading = true;
 
-            //DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
-            //{
-            //    weakSelf.IsLoading = false;
-            //});
-            System.Diagnostics.Debug.WriteLine("EmptyDataSetDidTapView");
+            DispatchQueue.MainQueue.DispatchAfter(new DispatchTime(DispatchTime.Now, TimeSpan.FromSeconds(5)), () =>
+            {
+                weakSelf.IsLoading = false;
+            });
         }
     }
 }

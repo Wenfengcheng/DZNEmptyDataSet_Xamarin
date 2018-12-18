@@ -85,9 +85,6 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="Xamarin.iOS" />
-    <Reference Include="DZNEmptyDataSet">
-      <HintPath>..\packages\com.microsoft.DZNEmptyDataSet.1.7.3\lib\Xamarin.iOS10\DZNEmptyDataSet.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\Contents.json" />
@@ -103,7 +100,6 @@
   <ItemGroup>
     <None Include="Info.plist" />
     <None Include="Entitlements.plist" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
@@ -120,6 +116,12 @@
     <BundleResource Include="Resources\placeholder_dropbox%402x.png" />
     <BundleResource Include="Resources\loading_imgBlue_78x78%402x.png" />
     <BundleResource Include="Resources\loading_imgBlue_78x78%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DZNEmptyDataSet\DZNEmptyDataSet.csproj">
+      <Project>{DACDA0BB-E076-4D80-BE16-9C3BE953192C}</Project>
+      <Name>DZNEmptyDataSet</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>
