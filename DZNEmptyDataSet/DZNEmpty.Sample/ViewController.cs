@@ -70,7 +70,7 @@ namespace DZNEmpty.Sample
 
     public class TableViewDataSetSource : EmptyDataSetSource
     {
-        ViewController weakSelf;
+        [Weak]ViewController weakSelf;
         public TableViewDataSetSource(ViewController viewController)
         {
             weakSelf = viewController;
