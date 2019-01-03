@@ -37,3 +37,6 @@ Please read this very interesting article about [*Designing For The Empty States
 * Compatible with iOS 6, tvOS 9, or later.
 * Compatible with iPhone, iPad, and Apple TV.
 * **App Store ready**
+
+### How to use
+Please reference [this sample project](https://github.com/Wenfengcheng/DZNEmptyDataSet_Xamarin/blob/master/DZNEmptyDataSet/DZNEmpty.Sample/ViewController.cs)
