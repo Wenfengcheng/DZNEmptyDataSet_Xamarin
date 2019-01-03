@@ -1,6 +1,10 @@
 # DZNEmptyDataSet_Xamarin
+[![Version Status](https://img.shields.io/cocoapods/v/DZNEmptyDataSet.svg?style=flat)](http://cocoadocs.org/docsets/DZNEmptyDataSet)
+
 Port of Xamarin iOS of the [DZNEmptyDataSet](https://github.com/dzenbot/DZNEmptyDataSet)
 
+### NuGet
+* [Xamarin.DZNEmptyDataSet](https://www.nuget.org/packages/Xamarin.DZNEmptyDataSet) [![NuGet](https://img.shields.io/nuget/v/Xamarin.DZNEmptyDataSet.svg?label=NuGet)](https://www.nuget.org/packages/Xamarin.DZNEmptyDataSet)
 
 ### The Empty Data Set Pattern
 Also known as *[Empty State](http://emptystat.es/)* or *[Blank Slate](http://patternry.com/p=blank-slate/)*.
